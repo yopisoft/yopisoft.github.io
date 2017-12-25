@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<head>
+<meta content="text/html" charset="UTF-8" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta charset="utf-8" />
+
+<!-- Twitter用 -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@yopi_soft" />
+<meta property="og:url"   content="http://yopisoft.net/demo/zipng/" />
+<meta property="og:image" content="http://yopisoft.net/demo/zipng/ss.jpg" />
+<meta property="og:title" content="よぴそふと - じぴんぐ" />
+<meta property="og:description" content="zipファイルをPNG画像に変換するのです。 画像しか貼れないTwitter等にファイルを投稿できちゃうふふ。" />
+
+
+<title>よぴそふと - じぴんぐ</title>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+<!-- jQuery library -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+
+<!-- jQuery Cookie -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+<!-- jQuery Cookie -->
+<!-- script src="./jszip-master/dist/jszip.js"></script -->
+<script src="./jszip/jszip.min.js"></script>
+
+<style>
+
+body{}
+
+#result{display:none;}
+
+.msg{
+	color:#ce0000;
+}
+h1 div{
+	display:inline-block;
+	font-size:12pt;
+}
+.con{margin:10px;min-height:400px;}
+li:before {
+    content: "\f14a";
+    font-family: FontAwesome;
+    margin-right: 8px;
+}
+#dd{
+	opacity:0.8;
+	cursor:pointer;
+}
+#dd:hover{color:#007bff;}
+
+.encimg{margin:1em 0 0 0;}
+.msg{
+	margin:1em 0 0 0;
+	font-size:24pt;
+}
+.zipmsg{
+	margin:1em 0 0 0;
+	font-size:24pt;
+	color:#449D44;
+}
+</style>
+
+<script>
+// GlovalVars _______________________________________________________
+var Dev       = 1;
+
+// jQuery Ready _____________________________________________________
+$(function(){
+	$('body').on('dragenter', function(e){$('#dd').css({color:'#007bff'});});
+	$('body').on('dragleave', function(e){$('#dd').css({color:'#000'});})
+	$('body').on('dragover', function(e){return false;});
+	$('body').on('drop', function(e) {
+		$('#dd').css({color:'#EC971F'});
+		var file = e.originalEvent.dataTransfer.files[0];
+		zipng(file);
+		return false; 
+	});
+	
+	$('#uploadfile').change(function(){
+		$('#dd').css({color:'#EC971F'});
+		var file = this.files[0];
+		zipng(file);
+	});
+	
+	$('.download').click(function(){
+		if(window.navigator.msSaveBlob){
+			var file_data_uint8 = new Uint8Array(Zipng.data);
+			var blob = new Blob([file_data_uint8.buffer], { type: "application/zip" });
+			window.navigator.msSaveBlob(blob,"hoge.txt");
+		}else{
+			console.log('window.navigator.msSaveBlob 無いの');
+		}
+	});
+	
+});
+
+// 開発用ダンプ
+function p(){
+	for(var i = 0; i < arguments.length; ++i){
+        if(Dev) console.log(arguments[i]);
+    }
+}
+
+// キャッシュ防止用のランダムな文字列
+function rp(){ return Math.random().toString(36).slice(-8);}
+
+
+</script>
+</head>
+<body>
+<form id="form">
+<div class="page-header container-fluid">
+	<h1 style="display:inline;background:#fff;">
+		<a href="./" style="color:#000;">じぴんぐ</a>
+		<div>Zipng - Zip2Png Image Converter</div>
+	</h1>
+	
+	<hr style="clear:both">
+</div>
+
+<!-- con -->
+<div class="con">
+	<label for="uploadfile">
+    	<div class="fa fa-upload fa-2x" id="dd">Drag&Drop File here</div>
+    	<input type="file" id="uploadfile" style="display:none;">
+	</label>
+	<div id="result"></div>
+</div>
+
+<!-- zipimage -->
+<!-- dummy not use file -->
+<input type="file" id="file" style="display:none;">
+<script src="./app.js"></script>
+<!-- script src="./zipimage-master/assets/app.js"></script -->
+<script src="./zipng.js"></script>
+
+<!-- footer -->
+<footer class="footer container-fluid">
+	<a href="/" style="color:#000;font-size:10pt;">&laquo; Top</a>
+	<hr style="margin-top:0px;">
+	<div style="dispaly:inline-block;float:left;font-size:9pt">
+		<p>
+			(c)よぴそふと <a href="http://yopisoft.net/" target="_blank">http://yopisoft.net/</a>
+			<a href="https://twitter.com/yopi_soft" target="_blank">@yopi_soft</a>
+		</p>
+	</div>
+	<div style="dispaly:inline-block;float:right;">
+		<a href="https://twitter.com/share" class="twitter-share-button" data-hashtags="zipimage,zipng">Tweet</a>
+		<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+		<a href="https://twitter.com/yopi_soft" class="twitter-follow-button" data-show-count="false">Follow</a>
+		<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+	</div>
+</footer>
+
+</form>
+</body>
+</html>
